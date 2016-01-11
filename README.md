@@ -21,7 +21,8 @@ This means that every object is 1.618 bigger/smaller than the child/parrent obje
 - grid
 - animations
 
-### components: Part i often reuse
+### components: Parts I often reuse
+- blockquote
 - button
 - pagination
 
