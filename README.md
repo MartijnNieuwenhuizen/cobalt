@@ -45,5 +45,5 @@ This means that every object is 1.618 bigger/smaller than the child/parrent obje
 - run-sequence
 
 # Usage
-1. Open cobalt in your terminal and run $ npm install
-2. Run $gulp server - and your good to go!
+1. Open cobalt in your terminal and run ```$ npm install```
+2. Run ```$ gulp server``` and your good to go!
