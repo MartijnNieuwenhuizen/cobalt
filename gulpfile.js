@@ -29,8 +29,8 @@ gulp.task('clean', function() {
 gulp.task('images', function() {
 
 	return gulp.src(config.images.src)
-	.pipe(imagemin())
-	.pipe(gulp.dest(config.base + config.images.folder));
+		.pipe(imagemin())
+		.pipe(gulp.dest(config.base + config.images.folder));
 
 });
 
