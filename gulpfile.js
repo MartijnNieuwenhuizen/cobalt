@@ -88,7 +88,9 @@ gulp.task('browser-sync', function() {
    
     browserSync.init({
         server: {
-            baseDir: config.base
+            baseDir: config.base,
+            tunnel: true,
+            tunnel: "my-private-site"
         }
     });
 
