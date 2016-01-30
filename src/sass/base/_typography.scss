@@ -47,16 +47,19 @@ $xxlarge-line-height: $xlarge-line-height * $golden;
 }
 
 h1 {
-	@include xxlarge;
+	@include xlarge;
 }
 h2 {
-	@include xlarge;
+	@include large;
+	font-weight: 300;
 }
 h3 {
 	@include large;
+	font-weight: bold;
 }
-h4, p, a, span, i, a, b, blockquote {
+h4, p, a, span, i, a, b, blockquote, li {
 	@include medium;
+	color: $font-black;
 }
 
 // Set margin default at 0
@@ -65,7 +68,7 @@ h1, h2, h3, h4, p {
 }
 
 a {
-		
+	text-decoration: none;
 }
 span {
 
@@ -83,14 +86,13 @@ blockquote {
 
 
 // Project Font Style
-
-/*@import url(FONT!);*/
-$primary-font: "Open Sans", "Helvetica", Sans-Serif;
+$primary-font: "Menlo", "Open Sans", "Helvetica", Sans-Serif;
 $secondary-font: "Georgia", "Times", "Times New Roman", Serif;
 $accent-font: "Garamond", Serif;
 
 * {
 	font-family: $primary-font;
+	color: $font-black;
 }
 
 

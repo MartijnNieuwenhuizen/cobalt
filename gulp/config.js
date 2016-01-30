@@ -1,6 +1,7 @@
 'use strict';
 
 var gulp = require('gulp');
+var $ = require('gulp-load-plugins')();
 
 var config = {
 
@@ -39,17 +40,19 @@ var config = {
         src: [
             'fonts/**',
             '*.ico',
-            'src/data/**'
-        ]
+            'src/.*'
+        ],
     },
 
     error: function(error) {
-        
-        console.log(error.message);
-    }
 
+        $.notify.onError({
+            title: 'Gulp',
+            message: 'Error: <%= error.message %>'
+        })(error);
+        this.emit('end');
+
+    }
 };
 
 module.exports = config;
-
-

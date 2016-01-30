@@ -12,9 +12,10 @@ var sass = require('gulp-sass');
 var runSequence = require('run-sequence');
 var browserSync = require('browser-sync').create();
 var fileinclude = require('gulp-file-include');
-
+var plumber = require('gulp-plumber');
 var reload = browserSync.reload;
-
+var notify = require('gulp-notify');
+var browserify = require('gulp-browserify');
 
 // Test run for gulp
 gulp.task('clean', function() {
@@ -24,13 +25,25 @@ gulp.task('clean', function() {
 
 });
 
-
 // Compress all images
 gulp.task('images', function() {
 
 	return gulp.src(config.images.src)
+		.pipe(plumber({
+		    errorHandler: config.error
+		}))
 		.pipe(imagemin())
 		.pipe(gulp.dest(config.base + config.images.folder));
+
+});
+
+gulp.task('misc:copy', function() {
+
+    return gulp.src(config.misc.src)
+        .pipe(plumber({
+            errorHandler: config.error
+        }))
+        .pipe(gulp.dest(config.base));
 
 });
 
@@ -39,18 +52,37 @@ gulp.task('images', function() {
 gulp.task('js', function() {
 
 	return gulp.src(config.js.src)
-	.pipe(uglify())
-	.pipe(rename(config.js.destFile))
-	.pipe(gulp.dest(config.base + config.js.folder))
+		.pipe(plumber({
+		    errorHandler: config.error
+		}))
+		.pipe(uglify())
+		.pipe(rename(config.js.destFile))
+		.pipe(gulp.dest(config.base + config.js.folder))
 
 });
 
+gulp.task('browserify', function() {
+   	
+  	return gulp.src('./src/js/main.js')
+  		.pipe(plumber({
+            errorHandler: config.error
+        }))
+       	.pipe(browserify({
+         	insertGlobals : false
+       	}))
+        .pipe(uglify())
+       	.pipe(gulp.dest(config.base + config.js.folder));
+
+});
 
 // Compress HTML
 gulp.task('html', function() {
 	
 	// Fileinclude
 	return gulp.src(config.html.src)
+		.pipe(plumber({
+		    errorHandler: config.error
+		}))
 	    .pipe(fileinclude({
 	    	prefix: '@@',
 	    	basepath: '@root'
@@ -64,24 +96,24 @@ gulp.task('html', function() {
 
 });
 
-
 // Compress Css
 gulp.task('sass', function() {
 
 	return gulp.src(config.sass.src)
-	.pipe(sass({outputStyle: 'compressed'}))
-	.pipe(autoprefixer({
+		.pipe(plumber({
+		    errorHandler: config.error
+		}))
+		.pipe(sass({outputStyle: 'compressed'}))
+		.pipe(autoprefixer({
 
-		browsers: ['> 1%', 'last 2 versions'],
-		cascade: false
+			browsers: ['> 1%', 'last 2 versions'],
+			cascade: false
 
-	}))
-	.pipe(rename(config.sass.destFile))
-	.pipe(gulp.dest(config.base + config.sass.folder))
+		}))
+		.pipe(rename(config.sass.destFile))
+		.pipe(gulp.dest(config.base + config.sass.folder))
 
 });
-
-
 
 // Static server
 gulp.task('browser-sync', function() {
@@ -89,41 +121,34 @@ gulp.task('browser-sync', function() {
     browserSync.init({
         server: {
             baseDir: config.base,
-            tunnel: true,
-            tunnel: "my-private-site"
-        }
+            startPath: '/',
+            open: true
+        }, 
+        tunnel: "martijnnieuwenhuizen"
     });
 
 });
-
-
-
 
 // Watch task
 gulp.task('watch', function() {
 
 	gulp.watch([config.html.watch], ['html', reload]);
 	gulp.watch([config.sass.watch], ['sass', reload]);
-	gulp.watch(config.js.watch, ['browserify', reload]);
-	gulp.watch(config.images.watch, ['images', reload]);
+	gulp.watch(config.js.watch, ['js', reload]);
 	gulp.watch(config.misc.src, ['misc:copy', reload]);
 
 });
 
-
-// Usable Tasks
+// Server task
 gulp.task('server', ['clean'], function() {
 
 	return runSequence(
-		['html', 'sass', 'images'],
+		['html', 'sass', 'images', 'misc:copy'],
 		'js',
 		'browser-sync',
 		'watch'
 	);
 
 });
-
-
-// start de server opnieuw op na een error (sluit nu af)
 
 
