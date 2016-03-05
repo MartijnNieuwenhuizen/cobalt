@@ -24,9 +24,15 @@ var config = {
 
     js: {
         watch: ['src/js/**/*.js'],
-        src: ['./src/js/**/*.js'],
+        src: ['./src/js/**/*.js', '!./src/js/vendor/comel.js'],
         folder: 'js/',
         destFile: 'main.min.js'
+    },
+
+    comel: {
+        src: [
+            './src/js/vendor/comel.js'
+        ]
     },
     
     images: {

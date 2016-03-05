@@ -47,6 +47,16 @@ gulp.task('misc:copy', function() {
 
 });
 
+gulp.task('comel', function() {
+
+    return gulp.src(config.comel.src)
+        .pipe(plumber({
+            errorHandler: config.error
+        }))
+        .pipe(gulp.dest(config.base + config.js.folder))
+
+});
+
 
 // Compress and combine JS files
 gulp.task('js', function() {
@@ -136,6 +146,7 @@ gulp.task('watch', function() {
 	gulp.watch([config.sass.watch], ['sass', reload]);
 	gulp.watch(config.js.watch, ['js', reload]);
 	gulp.watch(config.misc.src, ['misc:copy', reload]);
+	gulp.watch(config.misc.src, ['comel', reload]);
 
 });
 
@@ -144,6 +155,7 @@ gulp.task('server', ['clean'], function() {
 
 	return runSequence(
 		['html', 'sass', 'images', 'misc:copy'],
+		'comel',
 		'js',
 		'browser-sync',
 		'watch'
